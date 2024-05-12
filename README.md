@@ -12,51 +12,64 @@ To use the fly script in your Roblox game, follow these steps:
 4. Copy and paste the following code into the script:
 
 ```lua
--- Fly Script
+-- by zRaYsu
+local player = game.Players.LocalPlayer
 
--- Define the function to enable fly mode
-local function enableFly(player)
-    -- Check if the player is already flying
-    if player.Character and player.Character:FindFirstChild("Humanoid") then
-        local humanoid = player.Character.Humanoid
-        if humanoid.PlatformStand then
-            return
+if player then
+    local function enableFlight()
+        if player.Character then
+            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Running, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying, true)
+            end
         end
     end
-
-    -- Create a BodyVelocity object to control the player's movement
-    local bodyVelocity = Instance.new("BodyVelocity")
-    bodyVelocity.Velocity = Vector3.new(0, 50, 0) -- Set the initial velocity to make the player start flying
-    bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0) -- Set the maximum force to allow unlimited flying
-
-    -- Attach the BodyVelocity object to the player's character
-    if player.Character then
-        bodyVelocity.Parent = player.Character.HumanoidRootPart
-    end
-end
-
--- Define the function to disable fly mode
-local function disableFly(player)
-    -- Remove the BodyVelocity object from the player's character
-    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        local humanoidRootPart = player.Character.HumanoidRootPart
-        local bodyVelocity = humanoidRootPart:FindFirstChildOfClass("BodyVelocity")
-        if bodyVelocity then
-            bodyVelocity:Destroy()
+    
+    local function disableFlight()
+        if player.Character then
+            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Running, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall, true)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying, false)
+            end
         end
     end
-end
-
--- Connect the functions to the player's events
-game.Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function(character)
-        enableFly(player)
+    
+    game:GetService("UserInputService").InputBegan:Connect(function(input)
+        if input.KeyCode == Enum.KeyCode.F then
+            enableFlight()
+        end
     end)
-end)
-
-game.Players.PlayerRemoving:Connect(function(player)
-    disableFly(player)
-end)
+    
+    game:GetService("UserInputService").InputEnded:Connect(function(input)
+        if input.KeyCode == Enum.KeyCode.F then
+            disableFlight()
+        end
+    end)
+end
 ```
 
 1. Save the script and close the script editor.
