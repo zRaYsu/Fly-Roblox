@@ -53,9 +53,13 @@ RunService.Stepped:Connect(function()
 end)
 
 -- Click TP
+local clickTPConnection
 CreateButton("Click TP", UDim2.new(0.1, 0, 0.35, 0), function()
+    if clickTPConnection then
+        clickTPConnection:Disconnect()
+    end
     local mouse = LocalPlayer:GetMouse()
-    mouse.Button1Down:Connect(function()
+    clickTPConnection = mouse.Button1Down:Connect(function()
         if LocalPlayer.Character then
             LocalPlayer.Character:MoveTo(mouse.Hit.p)
         end
@@ -95,6 +99,9 @@ end)
 
 -- Rain Effect
 local function createRainDrop()
+    if not KryxCheatGui or not KryxCheatGui.Parent then
+        return
+    end
     local drop = Instance.new("Frame")
     drop.BackgroundColor3 = Color3.fromRGB(200, 200, 255)
     drop.Size = UDim2.new(0, 1, 0, 10)
@@ -130,7 +137,7 @@ local dragStart
 local startPos
 
 MainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
         dragStart = input.Position
         startPos = MainFrame.Position
@@ -138,13 +145,13 @@ MainFrame.InputBegan:Connect(function(input)
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement then
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
         dragInput = input
     end
 end)
 
 UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = false
     end
 end)
